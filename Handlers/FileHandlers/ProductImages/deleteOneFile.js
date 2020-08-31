@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
-const uploadBasePath = require('./uploadBasePath')
-const Product = require('../../Models/product')
+const uploadBasePath = require('./productImageBasePath')
+const Product = require('../../../Models/product')
 
 const deleteOneFile = async (filename, productId) => {
     let taskMessage

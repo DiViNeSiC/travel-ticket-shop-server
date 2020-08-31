@@ -1,12 +1,12 @@
 const multer = require('multer')
 const imageMimeTypes = ['image/jpeg', 'image/png', 'image/jpg']
-const uploadBasePath = require('../Handlers/fileHandlers/uploadBasePath')
+const productImageBasePath = require('../../Handlers/FileHandlers/ProductImages/productImageBasePath')
 
-const upload = multer({
-    dest: uploadBasePath,
+const uploadProductImage = multer({
+    dest: productImageBasePath,
     fileFilter: (req, file, callback) => { 
         callback(null, imageMimeTypes.includes(file.mimetype)) 
     }
 })
 
-module.exports = upload
+module.exports = uploadProductImage

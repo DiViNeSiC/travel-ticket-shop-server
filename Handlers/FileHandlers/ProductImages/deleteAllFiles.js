@@ -1,6 +1,6 @@
 const path = require('path')
 const fs = require('fs')
-const uploadBasePath = require('./uploadBasePath')
+const uploadBasePath = require('./productImageBasePath')
 
 const deleteAllFiles = (filenames) => {
     let taskMessage

@@ -1,4 +1,7 @@
 const mongoose = require('mongoose')
+const path = require('path')
+
+const avatarImageBasePath = 'Uploads/UserAvatars'
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -23,7 +26,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: 'Password Is Required'
     },
-    profileImage: {
+    avatarName: {
         type: String
     },
     role: {
@@ -36,4 +39,11 @@ const userSchema = new mongoose.Schema({
     }
 })
 
+userSchema.virtual('avatarImagePath').get(function() {
+    if (this.avatarName != null) {
+        return path.join('/', avatarImageBasePath, this.avatarName)
+    }
+})
+
 module.exports = mongoose.model('User', userSchema)
+module.exports.avatarImageBasePath = avatarImageBasePath

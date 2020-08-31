@@ -1,7 +1,7 @@
 const Product = require('../Models/product')
 const User = require('../Models/user')
-const deleteOneFile = require('../Handlers/fileHandlers/deleteOneFile')
-const deleteAllFiles = require('../Handlers/fileHandlers/deleteAllFiles')
+const deleteOneFile = require('../Handlers/fileHandlers/ProductImages/deleteOneFile')
+const deleteAllFiles = require('../Handlers/fileHandlers/ProductImages/deleteAllFiles')
 
 const getAllProducts = async (req, res) => {
     const creatorUser = await User.findById(req.payload.id)

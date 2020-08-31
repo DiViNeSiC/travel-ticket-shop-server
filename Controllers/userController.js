@@ -7,6 +7,7 @@ const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHa
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 
 const registerUser = async (req, res) => {
+    const avatarName = req.file != null ? req.file.filename : ''
     const { name, lastname, username, email, password } = req.body
     const isAdmin = req.params.isAdmin
 
@@ -29,6 +30,7 @@ const registerUser = async (req, res) => {
         username, 
         email,
         role,
+        avatarName,
         password 
     }, process.env.JWT_SECRET, { expiresIn: '20m' })
 
@@ -52,7 +54,10 @@ const activeUserAccount = async (req, res) => {
 
     const decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
 
-    const { name, lastname, email, username, role, password } = decodedToken
+    const { 
+        name, lastname, email, username,
+        role, avatarName, password 
+    } = decodedToken
 
     const hashedPassword = await bcrypt.hash(password.toString(), 10)
     const newUser = new User({ 
@@ -61,6 +66,7 @@ const activeUserAccount = async (req, res) => {
         username, 
         email, 
         role,
+        avatarName,
         password: hashedPassword
     })
 
@@ -83,7 +89,7 @@ const loginUser = async (req, res) => {
     const correctPassword = await bcrypt.compare(password.toString(), user.password)
     if(!correctPassword) throw 'Incorrect Password'
     
-    const expireDay = remember ? '7day' : '6h'
+    const expireDay = remember ? '7day' : '5h'
 
     const token = await jwt.sign({ 
         id: user._id, 
@@ -91,6 +97,7 @@ const loginUser = async (req, res) => {
         lastname: user.lastname, 
         username: user.username,
         email: user.email,
+        avatarName: user.avatarName,
         role: user.role 
     }, process.env.JWT_SECRET, { expiresIn: expireDay })
 

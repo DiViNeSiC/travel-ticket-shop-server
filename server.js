@@ -38,6 +38,7 @@ db.once('open', () => console.log('Connected To Mongoose'))
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+
 app.use(express.static('./public'))
 
 //Use Routes 

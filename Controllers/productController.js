@@ -2,6 +2,7 @@ const Product = require('../Models/product')
 const User = require('../Models/user')
 const deleteOneFile = require('../Handlers/fileHandlers/ProductImages/deleteOneFile')
 const deleteAllFiles = require('../Handlers/fileHandlers/ProductImages/deleteAllFiles')
+const updateImages = require('../Handlers/fileHandlers/ProductImages/updateImages')
 
 const getAllProducts = async (req, res) => {
     const creatorUser = await User.findById(req.payload.id)
@@ -57,7 +58,7 @@ const editProduct = async (req, res) => {
 
     const { productImageNames } = product
     
-    const newImageNames = [...productImageNames, newProductImageNames]
+    const newImageNames = updateImages(productImageNames, newProductImageNames)
 
     await product.updateOne({ 
         title,

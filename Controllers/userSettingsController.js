@@ -12,15 +12,23 @@ const getUserInformation = async (req, res) => {
 const updateUserInformation = async (req, res) => {
     const { name, lastname, username } = req.body
     const user = await User.findById(req.payload.id)
+    const { avatarName, _id } = user
     const lowerCaseUsername = username.toLowerCase()
     
     const userExist = await User.findOne({ username: lowerCaseUsername })
     if (userExist && user.username !== lowerCaseUsername) 
         throw 'User With This Username Already Exist!'
-        
-    const avatarName = req.file != null ? req.file.filename : user.avatarName
     
-    await user.updateOne({ name, lastname, username, avatarName })
+    if (avatarName != null && req.file != null) { 
+        const deleteAvatarTask = await deleteAvatar(avatarName, _id, true)
+        const { taskMessage, error } = deleteAvatarTask
+
+        if (error) throw taskMessage
+    }
+    
+    const avatarFile = req.file != null ? req.file.filename : avatarName
+
+    await user.updateOne({ name, lastname, username, avatarName: avatarFile })
 
     res.json({ 
         user,

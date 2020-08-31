@@ -3,7 +3,7 @@ const fs = require('fs')
 const uploadBasePath = require('./avatarImageBasePath')
 const User = require('../../../Models/user')
 
-const deleteOneFile = async (filename, userId) => {
+const deleteOneFile = async (filename, userId, isUpdating = false) => {
     let taskMessage
     let error = false
 
@@ -29,9 +29,11 @@ const deleteOneFile = async (filename, userId) => {
             taskMessage = `Cannot Remove The File ${err.message}`
             return { taskMessage, error }
         }
-        await user.updateOne({ 
-            avatarName: '' 
-        })  
+        if (!isUpdating) {
+            await user.updateOne({ 
+                avatarName: '' 
+            })  
+        }
     })
 
     taskMessage = `User Avatar Deleted Successfully`

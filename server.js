@@ -19,9 +19,11 @@ const loginRouter = require('./Routes/login')
 const viewProductRouter = require('./Routes/viewProduct')
 const controlProductRouter = require('./Routes/controlProduct')
 const userSettingsRouter = require('./Routes/userSettings')
+const logoutRouter = require('./Routes/logout')
 
 //Authorization Middlewares
 const auth = require('./Middlewares/auth')
+const notAuth = require('./Middlewares/notAuth')
 const authAdmin = require('./Middlewares/authAdmin')
 
 //MongoDB Connection
@@ -45,8 +47,9 @@ app.use(express.static('./public'))
 
 //Use Routes 
 app.use('/', indexRouter)
-app.use('/register', registerRouter)
-app.use('/login', loginRouter)
+app.use('/register', notAuth, registerRouter)
+app.use('/login', notAuth, loginRouter)
+app.use('/logout', auth, logoutRouter)
 app.use('/product', viewProductRouter)
 app.use('/dashboard', auth, dashboardRouter, userSettingsRouter)
 app.use('/control/product', auth, authAdmin, controlProductRouter)

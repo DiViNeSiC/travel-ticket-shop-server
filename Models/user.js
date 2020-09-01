@@ -33,6 +33,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    token: {
+        data: String,
+        default: ''
+    },
     resetPassToken: {
         data: String,
         default: ''

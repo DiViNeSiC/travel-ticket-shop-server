@@ -22,7 +22,6 @@ const sendResetPassEmail = async (req, res) => {
         await emailSenderHandler(email, resetPassToken, RESET_PASSWORD_METHOD)
         res.json({ 
             message: 'Reset password email has been sent to your email account, Please check your email',
-            resetPassToken
         })
     } catch (err) {
         res.status(400).json({ 
@@ -37,7 +36,10 @@ const resetUserPassword = async (req, res) => {
     const hashedPassword = await bcrypt
         .hash(newPassword.toString(), 10)
     const user = await User
-        .findByIdAndUpdate(req.decodedToken.id, { password: hashedPassword })
+        .findByIdAndUpdate(req.decodedToken.id, { 
+            password: hashedPassword, 
+            resetPassToken: '' 
+        })
 
     res.json({ message: `User ${user.username} Successfully Reset Password` })
 }

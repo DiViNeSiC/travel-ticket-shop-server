@@ -38,7 +38,6 @@ const registerUser = async (req, res) => {
         await emailSenderHandler(email, activationToken, ACTIVATION_METHOD)
         res.json({ 
             message: 'Activation email has been sent to your email account, Please active your account',
-            activationToken
         })
     } catch (err) {
         res.status(400).json({ 
@@ -84,6 +83,7 @@ const loginUser = async (req, res) => {
             user.email === usernameOrEmail.toLowerCase() || 
             user.username === usernameOrEmail.toLowerCase()
         )
+
     if(user == null) throw 'No User Found By That Information!'
 
     const correctPassword = await bcrypt.compare(password.toString(), user.password)
@@ -101,7 +101,24 @@ const loginUser = async (req, res) => {
         role: user.role 
     }, process.env.JWT_SECRET, { expiresIn: expireDay })
 
+    await User.findByIdAndUpdate(user._id, { token })
+
     res.json({ message: `Welcome ${user.name}`, token })
 }
 
-module.exports = { registerUser, activeUserAccount, loginUser }
+const logoutUser = async (req, res) => {
+    const user = await User.findById(req.payload.id)
+    
+    if (user == null) throw 'No User Found!'
+
+    await user.updateOne({ token: '' })
+
+    res.json({ message: `Log Out: ${user.username}` })
+}
+
+module.exports = { 
+    registerUser, 
+    activeUserAccount, 
+    loginUser, 
+    logoutUser 
+}

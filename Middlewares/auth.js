@@ -1,11 +1,29 @@
 const jwt = require('jsonwebtoken')
+const User = require('../Models/user')
 
 module.exports = async (req, res, next) => {
     try {
-        const token = req.headers.authorization
-        if (!token) return res.status(401).json({ message: 'You Need To Sign In!' })
+        const authHeader = req.headers.authorization
+        if (!authHeader) 
+            return res.status(401).json({ 
+                message: 'You Need To Sign In!', isAuth: false 
+            })
+            
+        const token = authHeader.split(' ')[1]
+        const user = await User.findOne({ token })
+        if (user == null) 
+            return res.status(401).json({ 
+                message: 'You Need To Sign In!', isAuth: false
+            })
+        
+        const payload = await jwt.verify(token, process.env.JWT_SECRET)
+        if (payload == null) { 
+            await user.updateOne({ token: '' })
+            return res.status(401).json({ 
+                message: 'Your Has Been Expired', isAuth: false
+            })
+        }
 
-        const payload = await jwt.verify(token.split(' ')[1], process.env.JWT_SECRET)
         req.payload = payload
         next()
     } catch (err) {

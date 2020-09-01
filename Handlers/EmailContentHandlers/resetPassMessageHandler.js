@@ -14,6 +14,6 @@ module.exports = (url, token) => {
             Or enable "Report Not Spam" on this email
         </p>
         </br>
-        <a href=${url}/reset-password/${token}>Reset Password!</a>
+        <a href=${url}/login/reset-password/${token}>Reset Password!</a>
     `
 }

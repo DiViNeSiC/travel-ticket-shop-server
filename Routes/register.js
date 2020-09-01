@@ -4,7 +4,7 @@ const upload = require('../Middlewares/Uploads/avatarImageUpload')
 const { catchErrors } = require('../Handlers/errorHandler')
 const { registerUser, activeUserAccount } = require('../Controllers/userController')
 
-router.post('/:isAdmin', rolePass, upload.single('avatar'), catchErrors(registerUser))
+router.post('/:isAdmin', upload.single('avatar'), rolePass, catchErrors(registerUser))
 router.post('/activation/:token', catchErrors(activeUserAccount))
 
 

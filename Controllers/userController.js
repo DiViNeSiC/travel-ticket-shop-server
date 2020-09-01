@@ -7,7 +7,7 @@ const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHa
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 
 const registerUser = async (req, res) => {
-    const avatarName = req.file != null ? req.file.filename : ''
+    const avatarName = req.avatarName
     const { name, lastname, username, email, password } = req.body
     const isAdmin = req.params.isAdmin
 
@@ -77,7 +77,7 @@ const activeUserAccount = async (req, res) => {
 const loginUser = async (req, res) => {
     const { usernameOrEmail, password } = req.body
     const remember = req.params.remember
-
+    
     const allUsers = await User.find()
     const user = allUsers.find(user => 
             user.email === usernameOrEmail.toLowerCase() || 

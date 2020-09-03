@@ -2,14 +2,21 @@ const User = require('../Models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const deleteTrashAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteTrashAvatar')
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
 const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHandler')
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 
 const registerUser = async (req, res) => {
-    const avatarName = req.avatarName
+    const avatarName = req.file != null ? req.file.filename : ''
     const { name, lastname, username, email, password } = req.body
     const isAdmin = req.params.isAdmin
+
+    if (username.length < 6) 
+        throw 'Username Must Be At Least 6 Characters' 
+
+    if (password.length < 8) 
+        throw 'Password Must Be At Least 8 Characters' 
 
     const allUsers = await User.find()
     const usernameExist = allUsers.some(user => 
@@ -18,12 +25,17 @@ const registerUser = async (req, res) => {
     const emailExist = allUsers.some(user => 
             user.email === email.toLowerCase()
         )
-
-    if(usernameExist) throw 'Username Already Exist!'
-    if(emailExist) throw 'Email Already Exist!'
-
+        
+    if(usernameExist) {
+        deleteTrashAvatar(avatarName)
+        throw 'Username Already Exist!'
+    }
+    if(emailExist) {
+        deleteTrashAvatar(avatarName)
+        throw 'Email Already Exist!'
+    }
+    
     const role = isAdmin === ADMIN_ROLE ? ADMIN_ROLE : USER_ROLE
-
     const activationToken = await jwt.sign({ 
         name, 
         lastname, 
@@ -40,6 +52,7 @@ const registerUser = async (req, res) => {
             message: 'Activation email has been sent to your email account, Please active your account',
         })
     } catch (err) {
+        deleteTrashAvatar(avatarName)
         res.status(400).json({ 
             message: 'We Cannot Send You An Activation Email!', 
             error: err.message 
@@ -50,8 +63,14 @@ const registerUser = async (req, res) => {
 const activeUserAccount = async (req, res) => {
     const token = req.params.token
     if (token == null) throw 'Token is Empty!'
-
-    const decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
+    let decodedToken
+    
+    try {
+        decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
+        if (decodedToken == null) throw 'Your Token Is Expired'
+    } catch (err) {
+        res.status(403).json({ message: 'Token Is Not A JWT Token!' })
+    }
 
     const { 
         name, lastname, email, username,

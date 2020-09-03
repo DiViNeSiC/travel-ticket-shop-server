@@ -1,5 +1,5 @@
 //Config Dotenv Library If We On Development
-if (process.env.NODE !== 'production') {
+if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config()
 }
 

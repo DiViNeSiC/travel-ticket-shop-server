@@ -3,8 +3,8 @@ const User = require('../Models/user')
 
 module.exports = async (req, res, next) => {
     try {
-        const authHeader = req.headers.authorization
-        if (!authHeader) 
+        const authHeader = req.headers.authorization 
+        if (authHeader == null) 
             return res.status(401).json({ 
                 message: 'You Need To Sign In!', isAuth: false 
             })

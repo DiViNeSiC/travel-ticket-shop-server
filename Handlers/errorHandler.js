@@ -1,12 +1,19 @@
+const deleteTrashAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteTrashAvatar')
+
 /*Catch Errors Handler*/
 exports.catchErrors = (fn) => {
     return function (req, res, next) {
         fn(req, res, next).catch((err) => {
+            const avatarName = req.file != null ? req.file.filename : null
             if (typeof err === "string") {
+                if(avatarName) deleteTrashAvatar(avatarName)
+
                 res.status(400).json({
                     message: err,
                 })
             } else {
+                if(avatarName) deleteTrashAvatar(avatarName)
+
                 next(err)
             }
         })

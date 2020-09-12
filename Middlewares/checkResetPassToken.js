@@ -9,11 +9,11 @@ module.exports = async (req, res, next) => {
             
         const user = await User.findOne({ resetPassToken: token })
         if (user == null) 
-            return res.status(401).json({ message: 'Invalid Token!' })
+            return res.status(403).json({ message: 'Invalid Token Or Use It Twice!' })
 
         const decodedToken = await jwt.verify(token, process.env.JWT_RESET_PASSWORD_SECRET)
         if (decodedToken == null) 
-            return res.status(401).json({ message: 'Your Token Has Expired!' }) 
+            return res.status(403).json({ message: 'Your Token Has Expired!' }) 
 
         req.decodedToken = decodedToken
         next()

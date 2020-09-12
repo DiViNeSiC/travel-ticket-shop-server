@@ -18,6 +18,7 @@ const registerRouter = require('./Routes/register')
 const loginRouter = require('./Routes/login')
 const viewProductRouter = require('./Routes/viewProduct')
 const controlProductRouter = require('./Routes/controlProduct')
+const addToCartRouter = require('./Routes/addToCart')
 const userSettingsRouter = require('./Routes/userSettings')
 const logoutRouter = require('./Routes/logout')
 
@@ -52,6 +53,7 @@ app.use('/login', notAuth, loginRouter)
 app.use('/logout', auth, logoutRouter)
 app.use('/product', viewProductRouter)
 app.use('/dashboard', auth, dashboardRouter, userSettingsRouter)
+app.use('/cart', auth, addToCartRouter)
 app.use('/control/product', auth, authAdmin, controlProductRouter)
 
 //Server Listen

@@ -14,6 +14,6 @@ module.exports = (url, token) => {
             Or enable "Report Not Spam" on this email
         </p>
         </br>
-        <a href=${url}/register/activation/${token}>Active Your Account!</a>
+        <a href=${url}/account-activation/${token}>Active Your Account!</a>
     `
 }

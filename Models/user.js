@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema({
     avatarName: {
         type: String
     },
+    avatarImagePath: {
+        type: String
+    },
     role: {
         type: String,
         required: true
@@ -40,12 +43,19 @@ const userSchema = new mongoose.Schema({
     resetPassToken: {
         data: String,
         default: ''
+    },
+    inCart: {
+        type: Array,
+        default: [],
     }
 })
 
-userSchema.virtual('avatarImagePath').get(function() {
+userSchema.pre('save', function() {
     if (this.avatarName != null) {
-        return path.join('/', avatarImageBasePath, this.avatarName)
+        return (
+            this.avatarImagePath = 
+                path.join('/', avatarImageBasePath, this.avatarName)
+        )
     }
 })
 

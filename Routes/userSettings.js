@@ -6,13 +6,15 @@ const {
     getUserInformation, 
     updateUserInformation,
     updateUserPassword,
+    updateUserAvatar,
     deleteUserAccount,
     deleteUserAvatar 
 } = require('../Controllers/userSettingsController')
 
 router.get('/settings', catchErrors(getUserInformation))
 
-router.put('/settings/update', upload.single('avatar'), catchErrors(updateUserInformation))
+router.put('/settings/update', catchErrors(updateUserInformation))
+router.put('/settings/update/avatar', upload.single('avatar'), catchErrors(updateUserAvatar))
 router.put('/settings/change-password', checkPassword, catchErrors(updateUserPassword))
 
 router.delete('/settings/delete-account', checkPassword, catchErrors(deleteUserAccount))

@@ -37,12 +37,17 @@ const productSchema = new mongoose.Schema({
     views: {
         type: Number,
         default: 0
+    },
+    imagePaths: {
+        type: Array, 
+        maxlength: 12,
+        default: []
     }
 }, { timestamps: true })
 
-productSchema.virtual('productImagesPaths').get(function() {
+productSchema.pre('save', function() {
     if (this.productImageNames != null && this.title != null) {
-        return this.productImageNames.map(name => 
+        return this.imagePaths = this.productImageNames.map(name => 
             path.join('/', productImageBasePath, name)
         )
     }

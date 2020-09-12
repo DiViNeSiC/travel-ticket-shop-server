@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const User = require('../Models/user')
 const bcrypt = require('bcrypt')
+
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
 const { RESET_PASSWORD_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 

@@ -1,18 +1,9 @@
 const router = require('express').Router()
-const Product = require('../Models/product')
-const searchFilter = require('../Middlewares/searchFilter')
+const { getAllProducts, getCartProducts } = require('../Controllers/dashboardController')
+const { catchErrors } = require('../Handlers/errorHandler')
 
-router.get('/', searchFilter, async (req, res) => {
-    const { name, lastname } = req.payload
-    const allProducts = await Product.find(req.filteredProducts)
-    const productLength = 
-        allProducts.length > 0 ? 
-        `${allProducts.length} Products` : 
-        'Unfortunately We Have No Products Now'
-    
-    res.json({ 
-        message: `Welcome ${name} ${lastname}`, allProducts, productLength 
-    })
-})
+router.get('/', catchErrors(getAllProducts))
+
+router.get('/cart', catchErrors(getCartProducts))
 
 module.exports = router

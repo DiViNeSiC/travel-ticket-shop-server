@@ -2,7 +2,6 @@ const User = require('../Models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-const deleteTrashAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteTrashAvatar')
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
 const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHandler')
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
@@ -11,6 +10,12 @@ const registerUser = async (req, res) => {
     const avatarName = req.file != null ? req.file.filename : ''
     const { name, lastname, username, email, password } = req.body
     const isAdmin = req.params.isAdmin
+
+    if (!username) throw 'Username Is Required' 
+
+    if (!password) throw 'Password Is Required' 
+
+    if (!email) throw 'Email Is Required' 
 
     if (username.length < 6) 
         throw 'Username Must Be At Least 6 Characters' 
@@ -26,14 +31,9 @@ const registerUser = async (req, res) => {
             user.email === email.toLowerCase()
         )
         
-    if(usernameExist) {
-        deleteTrashAvatar(avatarName)
-        throw 'Username Already Exist!'
-    }
-    if(emailExist) {
-        deleteTrashAvatar(avatarName)
-        throw 'Email Already Exist!'
-    }
+    if(usernameExist) throw 'Username Already Exist!'
+    
+    if(emailExist) throw 'Email Already Exist!'
     
     const role = isAdmin === ADMIN_ROLE ? ADMIN_ROLE : USER_ROLE
     const activationToken = await jwt.sign({ 
@@ -67,9 +67,10 @@ const activeUserAccount = async (req, res) => {
     
     try {
         decodedToken = await jwt.verify(token, process.env.JWT_SECRET)
-        if (decodedToken == null) throw 'Your Token Is Expired'
     } catch (err) {
-        res.status(403).json({ message: 'Token Is Not A JWT Token!' })
+        res.status(403).json({ 
+            message: "Token Is Not A JWT Token Or It's Expired!" 
+        })
     }
 
     const { 
@@ -96,6 +97,12 @@ const activeUserAccount = async (req, res) => {
 const loginUser = async (req, res) => {
     const { usernameOrEmail, password } = req.body
     const remember = req.params.remember
+
+    if (!usernameOrEmail) 
+        throw 'Username Or Email Is Required' 
+
+    if (!password) 
+        throw 'Password Is Required' 
     
     const allUsers = await User.find()
     const user = allUsers.find(user => 
@@ -122,7 +129,7 @@ const loginUser = async (req, res) => {
 
     await User.findByIdAndUpdate(user._id, { token })
 
-    res.json({ message: `Welcome ${user.name}`, token })
+    res.json({ user, token })
 }
 
 const logoutUser = async (req, res) => {

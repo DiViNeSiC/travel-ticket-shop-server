@@ -3,15 +3,16 @@ const User = require('../Models/user')
 
 module.exports = async (req, res, next) => {
     try {
-        const { password } = req.body
+        const { currentPass } = req.query || req.body
+
         const user = await User.findById(req.payload.id)
         if (user == null) throw 'You Are Not Logged In But How?!'
         
         const correctPassword = await bcrypt
-            .compare(password.toString(), user.password)
+            .compare(currentPass.toString(), user.password)
     
         if (!correctPassword) 
-            return res.status(401).json({ message: 'Incorrect Password' })
+            return res.status(403).json({ message: 'Incorrect Password' })
         
         next()
     } catch (err) {

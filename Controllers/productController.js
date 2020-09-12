@@ -1,19 +1,14 @@
 const Product = require('../Models/product')
 const User = require('../Models/user')
+
 const deleteOneFile = require('../Handlers/fileHandlers/ProductImages/deleteOneFile')
 const deleteAllFiles = require('../Handlers/fileHandlers/ProductImages/deleteAllFiles')
 const updateImages = require('../Handlers/fileHandlers/ProductImages/updateImages')
 
 const getAllProducts = async (req, res) => {
     const creatorUser = await User.findById(req.payload.id)
-    const allProducts = await Product
-        .find(req.filteredProducts)
-        .find({ creatorUser })
-
-    const productLength = 
-        allProducts.length > 0 ? 
-        `${allProducts.length} Products` : 
-        'You Have No Products'
+    const allProducts = await Product.find({ creatorUser })
+    const productLength = allProducts.length
     
     res.json({ allProducts, productLength })
 }
@@ -31,6 +26,7 @@ const createProduct = async (req, res) => {
         title, price, description, 
         continent, productImageNames, creatorUser
     })
+
     await newProduct.save()
 
     res.json({

@@ -1,7 +1,6 @@
 const router = require('express').Router()
-const { catchErrors } = require('../Handlers/errorHandler')
-const searchFilter = require('../Middlewares/searchFilter')
 const upload = require('../Middlewares/Uploads/productImageUpload')
+const { catchErrors } = require('../Handlers/errorHandler')
 const { 
     getAllProducts, 
     createProduct,
@@ -13,7 +12,7 @@ const {
 
 
 
-router.get('/', searchFilter, catchErrors(getAllProducts))
+router.get('/', catchErrors(getAllProducts))
 router.post('/', upload.array('productImages', 12), catchErrors(createProduct))
 
 router.get('/:id', catchErrors(getOneProduct))

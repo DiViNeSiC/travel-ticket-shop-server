@@ -12,7 +12,8 @@ const getAllProducts = async (req, res) => {
 
 const getCartProducts = async (req, res) => {
     const user = await User.findById(req.payload.id)
-    const productIds = user.inCart.map(product => product.productId)
+    const userCart = user.inCart
+    const productIds = userCart.map(product => product.productId)
     
     const cartProducts = await Product
         .find()

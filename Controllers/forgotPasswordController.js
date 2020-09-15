@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken')
-const User = require('../Models/user')
 const bcrypt = require('bcrypt')
-
+const User = require('../Models/user')
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
+
 const { RESET_PASSWORD_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 
 const sendResetPassEmail = async (req, res) => {
@@ -20,7 +20,12 @@ const sendResetPassEmail = async (req, res) => {
     await user.updateOne({ resetPassToken })
 
     try {
-        await emailSenderHandler(email, resetPassToken, RESET_PASSWORD_METHOD)
+        await emailSenderHandler(
+            email, 
+            resetPassToken, 
+            RESET_PASSWORD_METHOD
+        )
+
         res.json({ 
             message: 'Reset password email has been sent to your email account, Please check your email',
         })
@@ -34,8 +39,10 @@ const sendResetPassEmail = async (req, res) => {
 
 const resetUserPassword = async (req, res) => {
     const { newPassword } = req.body
+
     const hashedPassword = await bcrypt
         .hash(newPassword.toString(), 10)
+        
     const user = await User
         .findByIdAndUpdate(req.decodedToken.id, { 
             password: hashedPassword, 

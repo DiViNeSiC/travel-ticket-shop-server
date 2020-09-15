@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt')
-const User = require('../Models/user')
 const path = require('path')
-
+const User = require('../Models/user')
 const deleteAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteAvatar')
 
 const getUserInformation = async (req, res) => {
@@ -31,6 +30,7 @@ const updateUserInformation = async (req, res) => {
 const updateUserAvatar = async (req, res) => {
     const newAvatar = req.file != null ? req.file.filename : null
     const { id } = req.payload
+    
     const user = await User.findById(id)
     const { avatarName } = user
 

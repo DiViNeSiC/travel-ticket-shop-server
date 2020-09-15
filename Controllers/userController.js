@@ -1,9 +1,9 @@
 const User = require('../Models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-
 const deleteTrashAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteTrashAvatar')
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
+
 const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHandler')
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')
 
@@ -48,12 +48,18 @@ const registerUser = async (req, res) => {
     }, process.env.JWT_SECRET, { expiresIn: '20m' })
 
     try {
-        await emailSenderHandler(email, activationToken, ACTIVATION_METHOD)
+        await emailSenderHandler(
+            email, 
+            activationToken, 
+            ACTIVATION_METHOD
+        )
+
         res.json({ 
             message: 'Activation email has been sent to your email account, Please active your account',
         })
     } catch (err) {
         deleteTrashAvatar(avatarName)
+
         res.status(400).json({ 
             message: 'We Cannot Send You An Activation Email!', 
             error: err.message 
@@ -64,6 +70,7 @@ const registerUser = async (req, res) => {
 const activeUserAccount = async (req, res) => {
     const token = req.params.token
     if (token == null) throw 'Token is Empty!'
+
     let decodedToken
     
     try {
@@ -74,12 +81,20 @@ const activeUserAccount = async (req, res) => {
         })
     }
 
+    if (decodedToken == null) throw 'Invalid'
+
     const { 
-        name, lastname, email, username,
-        role, avatarName, password 
+        name, 
+        lastname, 
+        email, 
+        username,
+        role,
+        avatarName, 
+        password 
     } = decodedToken
 
     const hashedPassword = await bcrypt.hash(password.toString(), 10)
+
     const newUser = new User({ 
         name, 
         lastname, 
@@ -116,7 +131,7 @@ const loginUser = async (req, res) => {
     const correctPassword = await bcrypt.compare(password.toString(), user.password)
     if(!correctPassword) throw 'Incorrect Password'
     
-    const expireDay = remember ? '7day' : '5h'
+    const expireDay = remember === 'true' ? '7d' : '5h'
 
     const token = await jwt.sign({ 
         id: user._id, 

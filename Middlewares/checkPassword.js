@@ -3,7 +3,7 @@ const User = require('../Models/user')
 
 module.exports = async (req, res, next) => {
     try {
-        const { currentPass } = req.query || req.body
+        const currentPass = req.body.currentPass || req.query.currentPass
 
         const user = await User.findById(req.payload.id)
         if (user == null) throw 'You Are Not Logged In But How?!'

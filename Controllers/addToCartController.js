@@ -31,7 +31,7 @@ const addToCart = async (req, res) => {
 const getProducts = async (req, res) => {
     const message = req.message
     const newCart = req.newCart
-    const productIds = newCart.map(product => product.productId)
+    
     if (newCart == null) {
         return res.json({
             message,
@@ -39,6 +39,8 @@ const getProducts = async (req, res) => {
             cartProducts: []
         })
     }
+    
+    const productIds = newCart.map(product => product.productId)
 
     const cartProducts = await Product
         .find()

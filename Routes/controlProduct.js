@@ -14,8 +14,18 @@ const {
 
 
 router.get('/', catchErrors(getAllProducts))
-router.post('/', upload.array('productImages', 12), catchErrors(createProduct))
-router.post('/:id', upload.single('productImage'), catchErrors(uploadNewImage))
+
+router.post(
+    '/', 
+    upload.array('productImages', 12), 
+    catchErrors(createProduct)
+)
+
+router.post(
+    '/:id', 
+    upload.single('productImage'), 
+    catchErrors(uploadNewImage)
+)
 
 router.get('/:id', catchErrors(getOneProduct))
 router.put('/:id', catchErrors(editProduct))

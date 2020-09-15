@@ -36,8 +36,13 @@ mongoose.connect(process.env.DATABASE_URI, {
 
 const db = mongoose.connection
 
-db.on('error', (err) => console.error(`Error To Connect: ${err}`))
-db.once('open', () => console.log('Connected To Mongoose'))
+db.on('error', (err) => 
+    console.error(`Error To Connect: ${err}`)
+)
+
+db.once('open', () => 
+    console.log('Connected To Mongoose')
+)
 
 //Use Middlewares
 app.use(cors())

@@ -9,6 +9,7 @@ const updateImages = require('../Handlers/fileHandlers/ProductImages/updateImage
 const getAllProducts = async (req, res) => {
     const creatorUser = await User.findById(req.payload.id)
     const allProducts = await Product.find({ creatorUser })
+
     const productLength = allProducts.length
     
     res.json({ allProducts, productLength })
@@ -19,8 +20,8 @@ const createProduct = async (req, res) => {
         req.files.map(file => file.filename) : null
 
     const { title, price, description, continent } = req.body
-    const creatorUser = await User.findById(req.payload.id)
 
+    const creatorUser = await User.findById(req.payload.id)
     if (creatorUser == null) throw 'You Are Not Logged In'
 
     const newProduct = new Product({ 
@@ -62,7 +63,6 @@ const editProduct = async (req, res) => {
 
 const uploadNewImage = async (req, res) => {
     const newProductImageName = req.file != null ? req.file.filename : null
-    
     if (!newProductImageName) throw 'No Image Was Uploaded'
 
     const { id } = req.params
@@ -70,10 +70,9 @@ const uploadNewImage = async (req, res) => {
     const product = await Product.findById(id)
     if (product == null) throw 'No Product Found!'
 
-
     const { productImageNames } = product
 
-    if (productImageNames.length >= 12) throw 'Limit Reached'
+    if (productImageNames.length >= 12) throw 'Image Limit Reached'
 
     const newImageNames = updateImages(productImageNames, newProductImageName)
 

@@ -12,8 +12,7 @@ const getAllProducts = async (req, res) => {
 
 const getCartProducts = async (req, res) => {
     const user = await User.findById(req.payload.id)
-    const userCart = user.inCart
-    const productIds = userCart.map(product => product.productId)
+    const productIds = user.inCart.map(product => product.productId)
     
     const cartProducts = await Product
         .find()
@@ -24,7 +23,4 @@ const getCartProducts = async (req, res) => {
     res.json({ userCart, cartProducts })
 }
 
-module.exports = {
-    getAllProducts,
-    getCartProducts
-}
+module.exports = { getAllProducts, getCartProducts }

@@ -22,5 +22,6 @@ module.exports = async (req, res, next) => {
 
     req.newCart = newCart
     req.message = `Product ${product.title} Removed From Cart`
+    
     next()
 } 

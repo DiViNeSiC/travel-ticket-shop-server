@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer')
 const activeMessageHtml = require('./EmailContentHandlers/activeMessageHandler')
 const resetPassMessageHtml = require('./EmailContentHandlers/resetPassMessageHandler')
+
 const { ACTIVATION_METHOD, RESET_PASSWORD_METHOD } = require('./MethodHandlers/sendEmailMethodHandler')
 
 module.exports = async (userEmail, token, method) => {
@@ -39,5 +40,6 @@ function generateEmailContent(clientUrl, token, method) {
             break
         }
     }
+    
     return { html, subject }
 }

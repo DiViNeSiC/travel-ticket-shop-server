@@ -5,6 +5,13 @@ const uploadBasePath = require('./productImageBasePath')
 const deleteAllFiles = (filenames) => {
     let taskMessage
     let error = false
+
+    if (!filenames.length || !filenames) {
+        error = true
+        taskMessage = 'Files Are Empty !'
+        return { taskMessage, error }
+    }
+
     filenames.forEach(async (filename) => {
         const filePath = path.join(uploadBasePath, filename)
         fs.unlink(filePath, err => {

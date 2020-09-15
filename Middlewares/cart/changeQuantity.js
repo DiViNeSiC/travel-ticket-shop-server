@@ -25,5 +25,6 @@ module.exports = async (req, res, next) => {
 
     req.newCart = await (await User.findById(req.payload.id)).inCart
     req.message = `Product ${product.title} Changed Quantity To ${quantity}`
+    
     next()
 } 

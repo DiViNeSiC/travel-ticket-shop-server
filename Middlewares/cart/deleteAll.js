@@ -10,5 +10,6 @@ module.exports = async (req, res, next) => {
 
     req.newCart = newCart
     req.message = `Cart Cleared`
+    
     next()
 } 

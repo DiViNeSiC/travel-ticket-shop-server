@@ -51,7 +51,7 @@ const userSchema = new mongoose.Schema({
 })
 
 userSchema.pre('save', function() {
-    if (this.avatarName != null) {
+    if (this.avatarName !== '' && this.avatarName != null) {
         return (
             this.avatarImagePath = 
                 path.join('/', avatarImageBasePath, this.avatarName)

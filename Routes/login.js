@@ -10,6 +10,10 @@ router.post('/:remember', catchErrors(loginUser))
 
 router.put('/forgot-password', catchErrors(sendResetPassEmail))
 
-router.put('/reset-password/:token', catchErrors(checkResetPassToken), catchErrors(resetUserPassword))
+router.put(
+    '/reset-password/:token', 
+    catchErrors(checkResetPassToken), 
+    catchErrors(resetUserPassword)
+)
 
 module.exports = router

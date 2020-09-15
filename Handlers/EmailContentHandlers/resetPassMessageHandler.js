@@ -3,6 +3,7 @@ module.exports = (url, token) => {
         <h2>Reset Password Of Your Account</h2>
         </br>
         <p>
+            Be careful !
             We sent you this email to reset your account's password
             </br>
             If you don't request this link please DO NOT send this link to anyone and reset your email account password (Just in case)

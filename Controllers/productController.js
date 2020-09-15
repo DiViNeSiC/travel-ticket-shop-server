@@ -1,5 +1,6 @@
 const Product = require('../Models/product')
 const User = require('../Models/user')
+const path = require('path')
 
 const deleteOneFile = require('../Handlers/fileHandlers/ProductImages/deleteOneFile')
 const deleteAllFiles = require('../Handlers/fileHandlers/ProductImages/deleteAllFiles')
@@ -43,28 +44,49 @@ const getOneProduct = async (req, res) => {
 }
 
 const editProduct = async (req, res) => {
-    const newProductImageNames = req.files != null ? 
-        req.files.map(file => file.filename) : null
-
     const { title, price, description, continent } = req.body
     const { id } = req.params
 
     const product = await Product.findById(id)
     if (product == null) throw 'No Product Found!'
 
-    const { productImageNames } = product
-    
-    const newImageNames = updateImages(productImageNames, newProductImageNames)
-
     await product.updateOne({ 
         title,
         price,
         description,
-        continent,
-        productImageNames: newImageNames
+        continent
     })
 
     res.json({ message: `Product ${product.title} Has Been Updated` })
+}
+
+const uploadNewImage = async (req, res) => {
+    const newProductImageName = req.file != null ? req.file.filename : null
+    
+    if (!newProductImageName) throw 'No Image Was Uploaded'
+
+    const { id } = req.params
+
+    const product = await Product.findById(id)
+    if (product == null) throw 'No Product Found!'
+
+
+    const { productImageNames } = product
+
+    if (productImageNames.length >= 12) throw 'Limit Reached'
+
+    const newImageNames = updateImages(productImageNames, newProductImageName)
+
+    const imagePaths = newImageNames.map(name => 
+        path.join('/', Product.productImageBasePath, name)
+    )
+
+    await product.updateOne({
+        productImageNames: newImageNames,
+        imagePaths
+    })
+
+    res.json({ message: `Image Has Been Uploaded` })
 }
 
 const deleteProduct = async (req, res) => {
@@ -102,6 +124,7 @@ module.exports = {
     createProduct,
     getOneProduct, 
     editProduct, 
+    uploadNewImage,
     deleteProduct,
     deleteProductImage
 }

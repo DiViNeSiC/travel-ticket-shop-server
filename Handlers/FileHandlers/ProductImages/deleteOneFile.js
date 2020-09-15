@@ -14,7 +14,7 @@ const deleteOneFile = async (filename, productId) => {
         return { taskMessage, error }
     }
 
-    const { productImageNames } = product
+    const { productImageNames, imagePaths } = product
     if (!productImageNames.includes(filename)) {
         error = true
         taskMessage = 'No Image Found'
@@ -26,6 +26,12 @@ const deleteOneFile = async (filename, productId) => {
     const newProductImageNames = productImageNames
         .filter(imageName => imageName !== filename)
 
+    const newImagePaths = imagePaths.filter(path => {
+        const pathname = path.split('\\')[3]
+
+        return pathname !== filename
+    })
+
     fs.unlink(filePath, async (err) => {
         if (err) {
             error = true 
@@ -33,11 +39,12 @@ const deleteOneFile = async (filename, productId) => {
             return { taskMessage, error }
         }
         await product.updateOne({ 
-            productImageNames: newProductImageNames 
+            productImageNames: newProductImageNames,
+            imagePaths: newImagePaths 
         })  
     })
 
-    taskMessage = `Image ${filename} Deleted Successfully`
+    taskMessage = `Image Deleted Successfully`
     
     return { taskMessage, error }
 }

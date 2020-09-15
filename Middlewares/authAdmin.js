@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
 
     if (role !== ADMIN_ROLE) 
         return res.status(403).json({ 
-            message: 'You do not have access to edit products' 
+            message: 'You do not have access to Control products' 
         })
 
     next()

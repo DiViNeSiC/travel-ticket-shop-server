@@ -1,6 +1,6 @@
-module.exports = (currentImages, newImages) => {
+module.exports = (currentImages, newImage) => {
     //Just Adding Our New Pictures To Current Pictures
-    newImages.forEach(image => currentImages.push(image))
+    currentImages.push(newImage)
 
     return currentImages
 }

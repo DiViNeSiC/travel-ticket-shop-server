@@ -2,6 +2,7 @@ const User = require('../Models/user')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
+const deleteTrashAvatar = require('../Handlers/FileHandlers/AvatarImages/deleteTrashAvatar')
 const emailSenderHandler = require('../Handlers/emailSenderHandler')
 const { ADMIN_ROLE, USER_ROLE } = require('../Handlers/MethodHandlers/userRoleHandler')
 const { ACTIVATION_METHOD } = require('../Handlers/MethodHandlers/sendEmailMethodHandler')

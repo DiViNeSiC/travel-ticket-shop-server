@@ -1,5 +1,6 @@
 const User = require('../Models/user')
 const Product = require('../Models/product')
+const Payment = require('../Models/payment')
 
 const addToCart = async (req, res) => {
     const { quantity } = req.body
@@ -55,4 +56,33 @@ const getProducts = async (req, res) => {
     })
 }
 
-module.exports = { addToCart, getProducts }
+const successPurchase = async (req, res) => {
+    const { payment } = req.body
+    if (payment == null) throw 'No Information Received'
+    
+    const {
+        payerID,
+        paymentID,
+        paymentToken,
+        returnUrl,
+        address,
+        email
+    } = payment
+
+    const paymentInfo = new Payment({ 
+        payerID,
+        paymentID,
+        paymentToken,
+        returnUrl,
+        address,
+        email
+    })
+
+    await paymentInfo.save()
+
+    res.json({ 
+        message: `Thanks For Your Purchase Enjoy Your Travel! :)`
+    })
+}
+
+module.exports = { addToCart, getProducts, successPurchase }

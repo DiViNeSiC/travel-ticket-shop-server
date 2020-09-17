@@ -1,11 +1,10 @@
-module.exports = (req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-    res.setHeader('Access-Control-Allow-Credentials', true);
-
-    next();
+module.exports = (req, callback) => {
+    const whitelist = [process.env.CLIENT_URL]
+    let corsOptions
+    if (whitelist.indexOf(req.header('Origin')) !== -1) {
+        corsOptions = { origin: true }
+    } else {
+        corsOptions = { origin: false }
+    }
+    callback(null, corsOptions)    
 }

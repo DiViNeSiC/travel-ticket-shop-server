@@ -48,6 +48,7 @@ db.once('open', () =>
 )
 
 //Use Middlewares
+app.options('*', cors())
 app.use(cors({ origin: process.env.CLIENT_URL }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

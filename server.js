@@ -27,7 +27,11 @@ const auth = require('./Middlewares/auth')
 const notAuth = require('./Middlewares/notAuth')
 const authAdmin = require('./Middlewares/authAdmin')
 
+//Access Control Middleware
+const access = require('./Middlewares/accessControl')
+
 app.use(cors())
+app.use(access())
 
 //MongoDB Connection
 mongoose.connect(process.env.DATABASE_URI, { 

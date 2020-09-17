@@ -27,10 +27,6 @@ const auth = require('./Middlewares/auth')
 const notAuth = require('./Middlewares/notAuth')
 const authAdmin = require('./Middlewares/authAdmin')
 
-//Access Control Middleware
-const access = require('./Middlewares/accessControl')
-
-
 //MongoDB Connection
 mongoose.connect(process.env.DATABASE_URI, { 
     useNewUrlParser: true,
@@ -52,7 +48,6 @@ db.once('open', () =>
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
-app.use(access())
 
 app.use(express.static('./public'))
 

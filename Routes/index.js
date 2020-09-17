@@ -2,7 +2,6 @@ const router = require('express').Router()
 const Product = require('../Models/product')
 
 router.get('/', async (req, res) => {
-    console.log(req);
     const allProducts = await Product.find()
     const productLength = 
         allProducts.length > 0 ? 

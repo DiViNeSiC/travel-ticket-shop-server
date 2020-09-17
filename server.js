@@ -48,22 +48,22 @@ db.once('open', () =>
 )
 
 //Use Middlewares
-app.options('*', cors())
-app.use(cors({ origin: process.env.CLIENT_URL }))
+app.use(access())
+app.use(cors({origin: '*'}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('./public'))
 
 //Use Routes 
-app.use('/', access, indexRouter)
-app.use('/register', access, notAuth, registerRouter)
-app.use('/login', access, notAuth, loginRouter)
-app.use('/logout', access, auth, logoutRouter)
-app.use('/product', access, viewProductRouter)
-app.use('/dashboard', access, auth, dashboardRouter, userSettingsRouter)
-app.use('/cart', access, auth, addToCartRouter)
-app.use('/control/product', access, auth, authAdmin, controlProductRouter)
+app.use('/', indexRouter)
+app.use('/register', notAuth, registerRouter)
+app.use('/login', notAuth, loginRouter)
+app.use('/logout', auth, logoutRouter)
+app.use('/product', viewProductRouter)
+app.use('/dashboard', auth, dashboardRouter, userSettingsRouter)
+app.use('/cart', auth, addToCartRouter)
+app.use('/control/product', auth, authAdmin, controlProductRouter)
 
 //Server Listen
 const port = process.env.PORT || 3001

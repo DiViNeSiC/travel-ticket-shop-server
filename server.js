@@ -52,6 +52,7 @@ db.once('open', () =>
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cors())
+app.use(access())
 
 app.use(express.static('./public'))
 

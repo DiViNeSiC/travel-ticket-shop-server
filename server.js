@@ -50,7 +50,8 @@ db.once('open', () =>
 
 //Use Middlewares
 app.use(cors({ 
-    credentials: true
+    credentials: true,
+    origin: 'travel-ticket-shop.netlify.app'
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

@@ -51,11 +51,6 @@ app.use(express.urlencoded({ extended: true }))
 
 app.use(express.static('./public'))
 
-app.get('/get-headers', (req, res) => {
-    console.log(req.headers);
-    res.send(req.headers)
-})
-
 //Use Routes 
 app.use('/', indexRouter)
 app.use('/register', notAuth, registerRouter)

@@ -40,7 +40,11 @@ const createProduct = async (req, res) => {
 }
 
 const getOneProduct = async (req, res) => {
-    const product = await Product.findById(req.params.id)
+    const product = await Product
+        .findById(req.params.id)
+        .populate('creatorUser')
+        .exec()
+        
     if (product == null) throw 'There Is No Valid Product With This Id'
 
     res.json({ product })

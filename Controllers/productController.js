@@ -1,5 +1,4 @@
 const Product = require('../Models/product')
-const User = require('../Models/user')
 const path = require('path')
 
 const deleteOneFile = require('../Handlers/FileHandlers/ProductImages/deleteOneFile')
@@ -7,8 +6,11 @@ const deleteAllFiles = require('../Handlers/FileHandlers/ProductImages/deleteAll
 const updateImages = require('../Handlers/FileHandlers/ProductImages/updateImages')
 
 const getAllProducts = async (req, res) => {
-    const creatorUser = await User.findById(req.payload.id)
-    const allProducts = await Product.find({ creatorUser })
+    const creatorUser = req.payload.id
+    const allProducts = await Product
+        .find({ creatorUser })
+        .populate('creatorUser')
+        .exec()
 
     const productLength = allProducts.length
     
@@ -21,7 +23,7 @@ const createProduct = async (req, res) => {
 
     const { title, price, description, continent } = req.body
 
-    const creatorUser = await User.findById(req.payload.id)
+    const creatorUser = req.payload.id
     if (creatorUser == null) throw 'You Are Not Logged In'
 
     const newProduct = new Product({ 

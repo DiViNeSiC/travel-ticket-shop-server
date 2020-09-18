@@ -2,7 +2,11 @@ const Product = require('../Models/product')
 const User = require('../Models/user')
 
 const getAllProducts = async (req, res) => {
-    const allProducts = await Product.find()
+    const allProducts = await Product
+        .find()
+        .populate('creatorUser')
+        .exec()
+        
     const productLength = allProducts.length 
     
     res.json({ 

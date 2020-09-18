@@ -2,11 +2,12 @@ const router = require('express').Router()
 const Product = require('../Models/product')
 
 router.get('/', async (req, res) => {
-    const allProducts = await Product.find()
-    const productLength = 
-        allProducts.length > 0 ? 
-        `${allProducts.length} Products` : 
-        'Unfortunately We Have No Products Now'
+    const allProducts = await Product
+        .find()
+        .populate('creatorUser')
+        .exec()
+
+    const productLength = allProducts.length
     
     res.json({ allProducts, productLength })
 })

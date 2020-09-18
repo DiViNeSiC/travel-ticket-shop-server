@@ -13,8 +13,9 @@ const productSchema = new mongoose.Schema({
         required: 'Price Is Required'
     },
     creatorUser: {
-        type: Object,
-        required: true
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+        ref: 'User'
     },
     description: {
         type: String

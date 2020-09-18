@@ -27,7 +27,7 @@ const deleteOneFile = async (filename, productId) => {
         .filter(imageName => imageName !== filename)
 
     const newImagePaths = imagePaths.filter(path => {
-        const pathname = path.split('\\')[3]
+        const pathname = path.split('/')[3]
 
         return pathname !== filename
     })

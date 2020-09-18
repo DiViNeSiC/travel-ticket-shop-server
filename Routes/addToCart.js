@@ -11,8 +11,8 @@ router.post('/add/:productId', catchErrors(addToCart))
 
 router.post(
     '/success-purchase', 
-    catchErrors(clearCart),
     catchErrors(incrementSold), 
+    catchErrors(clearCart),
     catchErrors(successPurchase)
 )
 

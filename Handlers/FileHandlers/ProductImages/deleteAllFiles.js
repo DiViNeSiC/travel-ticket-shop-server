@@ -7,8 +7,7 @@ const deleteAllFiles = (filenames) => {
     let error = false
 
     if (!filenames.length || !filenames) {
-        error = true
-        taskMessage = 'Files Are Empty !'
+        taskMessage = 'Files Are Empty'
         return { taskMessage, error }
     }
 

@@ -10,9 +10,11 @@ module.exports = async (userEmail, token, method) => {
         AUTH_MANAGER_PASSWORD: pass, 
     } = process.env
 
+    console.log(user, pass);
+
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 587, secure: false, 
+        port: 587, secure: false,
         auth: { user, pass }
     })
     

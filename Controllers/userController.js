@@ -59,7 +59,7 @@ const registerUser = async (req, res) => {
         })
     } catch (err) {
         deleteTrashAvatar(avatarName)
-        console.log(err);
+
         res.status(400).json({ 
             message: 'We Cannot Send You An Activation Email!', 
             error: err.message 
